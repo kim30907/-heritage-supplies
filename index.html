@@ -120,33 +120,71 @@
             border-color: var(--accent-gold);
             transform: translateY(-1px);
         }
-        .filter-scroller {
+        .filter-section {
+            margin-bottom: 20px;
+        }
+        .filter-label-row {
             display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 12px;
-            margin-bottom: 16px;
-            scrollbar-width: none;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 0 4px;
         }
-        .filter-scroller::-webkit-scrollbar {
-            display: none;
+        .filter-label {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-        .filter-btn {
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-secondary);
-            padding: 8px 14px;
-            border-radius: 20px;
-            font-size: 13px;
+        .filter-count-badge {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .dropdown-container {
+            position: relative;
+            width: 100%;
+        }
+        .category-select {
+            width: 100%;
+            background-color: var(--bg-card);
+            color: var(--text-primary);
+            border: 1.5px solid var(--border-subtle);
+            border-radius: var(--radius-btn);
+            padding: 13px 44px 13px 16px;
+            font-size: 14px;
             font-weight: 600;
-            white-space: nowrap;
+            font-family: inherit;
             cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
             transition: all 0.2s ease;
         }
-        .filter-btn.active {
-            background: var(--accent-gold);
-            color: #000;
+        .category-select:focus, .category-select:hover {
+            outline: none;
             border-color: var(--accent-gold);
+            background-color: var(--bg-card-hover);
+        }
+        .category-select option {
+            background-color: #181b22;
+            color: #f0f2f5;
+            padding: 12px;
+        }
+        .select-arrow {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
         }
         .cards-feed {
             display: flex;
@@ -296,12 +334,26 @@
             </div>
         </header>
 
-        <nav class="filter-scroller" id="filterScroller">
-            <button class="filter-btn active" data-filter="all">All (10)</button>
-            <button class="filter-btn" data-filter="tools">🪓 Bushcraft & Tools</button>
-            <button class="filter-btn" data-filter="homestead">🍳 Homestead & Pantry</button>
-            <button class="filter-btn" data-filter="herbal">🌿 Herbal Vault</button>
-        </nav>
+        <div class="filter-section">
+            <div class="filter-label-row">
+                <label for="categorySelect" class="filter-label">
+                    <span>🏛️</span>
+                    <span>Browse By Formulation Category</span>
+                </label>
+                <span class="filter-count-badge" id="categoryCountBadge">Showing 10 items</span>
+            </div>
+            <div class="dropdown-container">
+                <select class="category-select" id="categorySelect">
+                    <option value="all">🌟 All Categories (10)</option>
+                    <option value="tools">🪓 Bushcraft, Tools & Blacksmith (4)</option>
+                    <option value="homestead">🍳 Homestead, Pantry & Preservation (3)</option>
+                    <option value="herbal">🌿 Herbal Vault & Natural Tonics (1)</option>
+                </select>
+                <div class="select-arrow">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+            </div>
+        </div>
 
         <main class="cards-feed" id="cardsFeed">
             
@@ -606,23 +658,22 @@
     </div>
 
     <script>
-        const filterBtns = document.querySelectorAll('.filter-btn');
+        const categorySelect = document.getElementById('categorySelect');
+        const countBadge = document.getElementById('categoryCountBadge');
         const productCards = document.querySelectorAll('.product-card');
 
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-
-                const target = btn.dataset.filter;
-                productCards.forEach(card => {
-                    if (target === 'all' || card.dataset.category === target) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
+        categorySelect.addEventListener('change', (e) => {
+            const target = e.target.value;
+            let visibleCount = 0;
+            productCards.forEach(card => {
+                if (target === 'all' || card.dataset.category === target) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
             });
+            countBadge.textContent = `Showing ${visibleCount} item${visibleCount === 1 ? '' : 's'}`;
         });
     </script>
 </body>
