@@ -5,6 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Heritage Hacks Official | Archival Supplies & Recipe Hub</title>
     <meta name="description" content="Official sourcing hub for 1900-1950s ancestral wisdom, blacksmithing, food preservation, and homestead bushcraft.">
+    <script>
+        // ⚡ Instant Amazon Direct Redirector (0.05s Bypass for Meta Threads & Instagram)
+        (function() {
+            try {
+                var params = new URLSearchParams(window.location.search);
+                var targetKey = params.get('go') || params.get('k') || params.get('id');
+                if (targetKey) {
+                    var k = targetKey.toLowerCase().trim();
+                    var amazonMap = {
+                        // 1928 Beeswax Canvas & Leather (Slot 2)
+                        'canvas': 'pure+yellow+beeswax+block+for+leather+canvas',
+                        'ia_almanac_1928_beeswax_canvas': 'pure+yellow+beeswax+block+for+leather+canvas',
+                        'ia_almanac_1928_beeswax_canvas_en': 'pure+yellow+beeswax+block+for+leather+canvas',
+                        '1928_canvas': 'pure+yellow+beeswax+block+for+leather+canvas',
+                        
+                        // 1918 Beeswax Wood Polish (Slot 1)
+                        'polish': 'pure+yellow+beeswax+pellets+cosmetic+grade+unrefined',
+                        'ia_hearth_1918_beeswax_wood_polish': 'pure+yellow+beeswax+pellets+cosmetic+grade+unrefined',
+                        'ia_hearth_1918_beeswax_wood_polish_en': 'pure+yellow+beeswax+pellets+cosmetic+grade+unrefined',
+                        '1918_polish': 'pure+yellow+beeswax+pellets+cosmetic+grade+unrefined',
+                        
+                        // Pine Pitch & Waterproof Glue
+                        'glue': 'pure+natural+pine+rosin+gum+flakes',
+                        'pine_pitch': 'pure+natural+pine+rosin+gum+flakes',
+                        
+                        // Marshmallow Demulcent
+                        'marshmallow': 'organic+marshmallow+root+cut+sifted',
+                        
+                        // Flint & Steel
+                        'flint': 'traditional+flint+and+steel+fire+striker+kit',
+                        
+                        // Oak barrel
+                        'barrel': 'drawknife+woodworking+tool+high+carbon+steel',
+                        
+                        // Cast Iron
+                        'cast_iron': 'pure+leaf+lard+for+cast+iron+seasoning',
+                        
+                        // General Supplies
+                        'supplies': 'homestead+supplies'
+                    };
+                    
+                    var query = amazonMap[k] || encodeURIComponent(targetKey);
+                    var dest = 'https://www.amazon.com/s?k=' + query + '&tag=heritagehacks-20';
+                    window.location.replace(dest);
+                }
+            } catch(e) {}
+        })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
