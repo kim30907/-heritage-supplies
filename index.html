@@ -2,6 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script>
+        (function() {
+            try {
+                var params = new URLSearchParams(window.location.search);
+                var go = params.get('go');
+                if (go) {
+                    var tag = 'heritagehacks-20';
+                    var queryMap = {
+                        'drawing_balm': 'drawing+salve+pine+tar',
+                        'drawing_salve': 'drawing+salve+pine+tar',
+                        'pine_resin': 'pure+pine+resin+rock',
+                        'black_spruce': 'pine+gum+pitch+waterproofing',
+                        'beef_tallow': 'grass+fed+beef+tallow',
+                        'tallow': 'grass+fed+beef+tallow',
+                        'beeswax': 'pure+organic+beeswax+pellets',
+                        'willow_bark': 'white+willow+bark+organic',
+                        'garlic_honey': 'raw+unfiltered+honey+organic',
+                        'waterproofing': 'beeswax+pine+rosin+waterproofing',
+                        'canvas': 'otter+wax+canvas+waterproofing',
+                        'polish': 'pure+carnauba+wood+polish',
+                        'glue': 'hide+glue+traditional+woodworking',
+                        'flint': 'flint+and+steel+fire+starter',
+                        'barrel': 'white+oak+aging+barrel',
+                        'cast_iron': 'lodge+cast+iron+skillet',
+                        'marshmallow': 'marshmallow+root+organic+herbal',
+                        'waterglass': 'sodium+silicate+waterglass+egg',
+                        'oxymel': 'raw+apple+cider+vinegar+mother',
+                        'charcoal': 'hardwood+lump+charcoal+traditional',
+                        'soap': 'pure+lye+sodium+hydroxide+soap',
+                        'pemmican': 'grass+fed+beef+tallow+jerky',
+                        'pottery': 'terracotta+pot+clay+cooler',
+                        'candle': 'pure+beeswax+block+candle+making'
+                    };
+                    var cleanKey = go.toLowerCase().replace(/^(ia_|loc_)/, '');
+                    var targetQuery = '';
+                    for (var k in queryMap) {
+                        if (cleanKey.indexOf(k) !== -1) {
+                            targetQuery = queryMap[k];
+                            break;
+                        }
+                    }
+                    if (!targetQuery) {
+                        targetQuery = cleanKey.replace(/[_\-]+/g, '+');
+                    }
+                    var amazonUrl = 'https://www.amazon.com/s?k=' + targetQuery + '&tag=' + tag;
+                    window.location.replace(amazonUrl);
+                }
+            } catch (e) {
+                console.error('Redirect error:', e);
+            }
+        })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Heritage Hacks Official | Archival Supplies & Recipe Hub</title>
     <meta name="description" content="Official sourcing hub for 1900-1950s ancestral wisdom, blacksmithing, food preservation, and homestead bushcraft.">
