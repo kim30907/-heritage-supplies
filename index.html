@@ -8,9 +8,10 @@
     <script>
         (function() {
             try {
-                var params = new URLSearchParams(window.location.search);
-                var go = params.get('go');
-                if (go) {
+                var href = window.location.href;
+                var match = href.match(/[?&#]go=([^&#]+)/i);
+                if (match && match[1]) {
+                    var go = decodeURIComponent(match[1]).toLowerCase().replace(/^(ia_|loc_)/, '');
                     var tag = 'heritagehacks-20';
                     var queryMap = {
                         'drawing_balm': 'drawing+salve+pine+tar',
@@ -38,19 +39,34 @@
                         'pottery': 'terracotta+pot+clay+cooler',
                         'candle': 'pure+beeswax+block+candle+making'
                     };
-                    var cleanKey = go.toLowerCase().replace(/^(ia_|loc_)/, '');
                     var targetQuery = '';
                     for (var k in queryMap) {
-                        if (cleanKey.indexOf(k) !== -1) {
+                        if (go.indexOf(k) !== -1) {
                             targetQuery = queryMap[k];
                             break;
                         }
                     }
                     if (!targetQuery) {
-                        targetQuery = cleanKey.replace(/[_\-]+/g, '+');
+                        targetQuery = go.replace(/[_\-]+/g, '+');
                     }
                     var amazonUrl = 'https://www.amazon.com/s?k=' + targetQuery + '&tag=' + tag;
+                    
+                    // 1. Hide bio hub body immediately to prevent flashing
+                    document.documentElement.style.background = '#0f1115';
+                    var s = document.createElement('style');
+                    s.innerHTML = 'body { display: none !important; }';
+                    document.head.appendChild(s);
+                    
+                    // 2. Synchronous redirect attempts
                     window.location.replace(amazonUrl);
+                    window.location.href = amazonUrl;
+                    document.location.href = amazonUrl;
+                    
+                    // 3. Fallback Meta Refresh
+                    var m = document.createElement('meta');
+                    m.httpEquiv = 'refresh';
+                    m.content = '0; url=' + amazonUrl;
+                    document.head.appendChild(m);
                 }
             } catch (e) {
                 console.error('Redirect error:', e);
@@ -370,6 +386,64 @@
     </style>
 </head>
 <body>
+    <div id="redirectScreen" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#0f1115;z-index:999999;flex-direction:column;align-items:center;justify-content:center;color:#e5b869;font-family:sans-serif;text-align:center;padding:24px;box-sizing:border-box;">
+        <div style="font-size:44px;margin-bottom:16px;">🏛️</div>
+        <h2 style="font-size:20px;font-weight:700;color:#f0f2f5;margin-bottom:8px;">Redirecting to Amazon...</h2>
+        <p style="font-size:14px;color:#9aa0a6;margin-bottom:24px;">Opening verified historical supplies (0.05s)</p>
+        <a id="redirectFallbackBtn" href="#" style="background:linear-gradient(135deg, #e5b869, #c79c4a);color:#121212;padding:14px 28px;border-radius:12px;font-size:15px;font-weight:700;text-decoration:none;display:inline-block;box-shadow:0 4px 14px rgba(229,184,105,0.3);">Tap Here to Open Amazon</a>
+    </div>
+    <script>
+        (function() {
+            var match = window.location.href.match(/[?&#]go=([^&#]+)/i);
+            if (match && match[1]) {
+                var screen = document.getElementById('redirectScreen');
+                if (screen) screen.style.display = 'flex';
+                var btn = document.getElementById('redirectFallbackBtn');
+                var go = decodeURIComponent(match[1]).toLowerCase().replace(/^(ia_|loc_)/, '');
+                var queryMap = {
+                    'drawing_balm': 'drawing+salve+pine+tar',
+                    'drawing_salve': 'drawing+salve+pine+tar',
+                    'pine_resin': 'pure+pine+resin+rock',
+                    'black_spruce': 'pine+gum+pitch+waterproofing',
+                    'beef_tallow': 'grass+fed+beef+tallow',
+                    'tallow': 'grass+fed+beef+tallow',
+                    'beeswax': 'pure+organic+beeswax+pellets',
+                    'willow_bark': 'white+willow+bark+organic',
+                    'garlic_honey': 'raw+unfiltered+honey+organic',
+                    'waterproofing': 'beeswax+pine+rosin+waterproofing',
+                    'canvas': 'otter+wax+canvas+waterproofing',
+                    'polish': 'pure+carnauba+wood+polish',
+                    'glue': 'hide+glue+traditional+woodworking',
+                    'flint': 'flint+and+steel+fire+starter',
+                    'barrel': 'white+oak+aging+barrel',
+                    'cast_iron': 'lodge+cast+iron+skillet',
+                    'marshmallow': 'marshmallow+root+organic+herbal',
+                    'waterglass': 'sodium+silicate+waterglass+egg',
+                    'oxymel': 'raw+apple+cider+vinegar+mother',
+                    'charcoal': 'hardwood+lump+charcoal+traditional',
+                    'soap': 'pure+lye+sodium+hydroxide+soap',
+                    'pemmican': 'grass+fed+beef+tallow+jerky',
+                    'pottery': 'terracotta+pot+clay+cooler',
+                    'candle': 'pure+beeswax+block+candle+making'
+                };
+                var targetQuery = '';
+                for (var k in queryMap) {
+                    if (go.indexOf(k) !== -1) {
+                        targetQuery = queryMap[k];
+                        break;
+                    }
+                }
+                if (!targetQuery) {
+                    targetQuery = go.replace(/[_\-]+/g, '+');
+                }
+                var targetUrl = 'https://www.amazon.com/s?k=' + targetQuery + '&tag=heritagehacks-20';
+                if (btn) {
+                    btn.href = targetUrl;
+                    setTimeout(function() { btn.click(); }, 100);
+                }
+            }
+        })();
+    </script>
     <div class="container">
         <header class="profile-header">
             <div class="avatar-wrap">
